@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_unsplash/widgets/paginated_grid.dart';
 import '../services/api.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  List<String> collectionID = [
+  final List<String> collectionID = [
     '139386',
     '1580860',
   ];
-
-  int val = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +17,6 @@ class _HomeState extends State<Home> {
         backgroundColor: Color(0xFF9400d3),
         title: Text("Flutter Unsplash"),
         bottom: TabBar(
-          onTap: (value) {
-            setState(() {
-              val = value;
-            });
-          },
           tabs: [
             Tab(text: "Pets"),
             Tab(text: "Nature"),
@@ -38,22 +27,34 @@ class _HomeState extends State<Home> {
           // indicator: ,
         ),
       ),
-      body: FutureBuilder(
-        future: getPhotosByCollection(collectionID[val]),
-        initialData: {},
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return snapshot.connectionState != ConnectionState.done
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : PaginatedGrid(
-                  collectionID[val],
-                );
-        },
+      body: TabBarView(
+        children: [
+          FutureBuilder(
+            future: getPhotosByCollection(collectionID[0]),
+            initialData: {},
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return snapshot.connectionState != ConnectionState.done
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : PaginatedGrid(
+                      collectionID[0],
+                    );
+            },
+          ),
+          FutureBuilder(
+            future: getPhotosByCollection(collectionID[1]),
+            initialData: {},
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return snapshot.connectionState != ConnectionState.done
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : PaginatedGrid(collectionID[1]);
+            },
+          ),
+        ],
       ),
-      // body: PaginatedGrid(
-      //   collectionID[val],
-      // ),
     );
   }
 }

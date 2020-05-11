@@ -8,7 +8,7 @@ final Dio dio = Dio(
     "Authorization": 'Client-ID $KEY',
   }, queryParameters: {
     'per_page': 10,
-    'orientation': 'landscape'
+    // 'orientation': 'landscape'
   }),
 );
 
